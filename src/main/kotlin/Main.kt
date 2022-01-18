@@ -1,15 +1,29 @@
-// Realizing the empty cinema room
-fun cinema( rows: Int, seats: Int) {
+fun cinema( rs: MutableList<MutableList<String>>, rows: Int, seats: Int, nR: Int, nS: Int ) {
     println("Cinema:")
     print(" ")
-    for (i in 1..seats) print(" $i")
-    println()
-    for (i in 1..rows) {
-        println("$i " + "S ".repeat(seats))
+    if (nR > 0 && nS > 0) {
+        rs[nR - 1][nS - 1] = "B"
+        for (i in 0 until seats) print(" ${i + 1}")
+        for (i in 0..rows - 1) {
+            println()
+            print("${i + 1}")
+            for (j in 0 until seats) {
+                print(" ${rs[i][j]}")
+            }
+        }
+    } else {
+        for (i in 0 until seats) print(" ${i + 1}")
+        for (i in 0..rows - 1) {
+            println()
+            print("${i + 1}")
+            for (j in 0 until seats) {
+                print(" ${rs[i][j]}")
+            }
+        }
     }
 }
 
-// Evaluating the seat ticket
+// Pricing the seat ticket
 fun price(rows: Int, seats: Int, nR: Int): Int {
     if (rows * seats <= 60) {
         return 10
@@ -18,10 +32,11 @@ fun price(rows: Int, seats: Int, nR: Int): Int {
     } else return 8
 }
 
-fun main(args: Array<String>) {
-
-    var rows = 10  // incorrect entry
-    var seats = 10  // incorrect entry
+fun main() {
+    var rows = 10   // Incorrect entry
+    var seats = 10  // Incorrect entry
+    var nR = 0      // The row number
+    var nS = 0      // The seat number
     while(rows > 9) {
         println("Enter the number of rows:")
         rows = readLine()!!.toInt()
@@ -30,31 +45,29 @@ fun main(args: Array<String>) {
         println("Enter the number of seats in each row:")
         seats = readLine()!!.toInt()
     }
-    cinema(rows, seats)
     val line = MutableList(seats) {"S"}
-    var rs = mutableListOf<MutableList<String>>()
+    val rs = mutableListOf<MutableList<String>>()
     repeat(rows) {
         rs.add(line.toMutableList())
     }
-
-    println("Enter a row number:")
-    val nR = readLine()!!.toInt()
-    println("Enter a seat number in that row:")
-    val nS = readLine()!!.toInt()
-    println("Ticket price: $" + price(rows, seats, nR))
-    rs[nR - 1][nS - 1] = "B"
-    println("Cinema:")
-    print(" ")
-    for (i in 0 until seats) print(" ${i + 1}")
-    for (i in 0..rows - 1) {
-        println()
-        print("${i + 1}")
-        for (j in 0 until seats) {
-            print(" ${rs[i][j]}")
+    // Displaying the options and achieving the order...
+    do {
+        println("\n\n1. Show the seats\n2. Buy a ticket\n0. Exit")
+        val opt = readLine()!!
+        if (opt == "1") {
+            cinema(rs, rows, seats, nR, nS)
+        } else if (opt == "2") {
+            println("Enter a row number:")
+            nR = readLine()!!.toInt()
+            println("Enter a seat number in that row:")
+            nS = readLine()!!.toInt()
+            println("Ticket price: $" + price(rows, seats, nR))
         }
-    }
+    } while (opt != "0")
+}
 
-    // Try adding program arguments via Run/Debug configuration.
+
+
+// Try adding program arguments via Run/Debug configuration.
     // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
 
-}
